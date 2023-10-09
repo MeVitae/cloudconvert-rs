@@ -8,7 +8,7 @@ homepage = "https://github.com/MeVitae/cloudconvert-rs"
 repository = "https://github.com/MeVitae/cloudconvert-rs"
 keywords = ["cloudconvert", "convert", "client", "api", "pdf"]
 categories = ["api-bindings", "web-programming", "asynchronous"]
-readme = "../README.md"
+readme = "README.md"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
