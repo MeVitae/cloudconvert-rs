@@ -76,6 +76,8 @@ pub mod webhook;
 pub use format::Format;
 use task::Task;
 
+pub use hapic::Error;
+
 hapic::json_api!(
     /// The API client. This is used to call items implementing [`ApiCall`]. Usually, this is
     /// [`job::Create`], but it can be any [`task::Task`].
