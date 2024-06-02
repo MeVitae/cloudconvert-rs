@@ -23,6 +23,27 @@ macro_rules! format_enum {
                 }
             }
         }
+
+        impl From<Cow<'static, str>> for $Format {
+            fn from(s: Cow<'static, str>) -> $Format {
+                match s {
+                    $(s if s == $str => $Format::$Variant,)*
+                    s => $Format::$Custom(s),
+                }
+            }
+        }
+
+        impl From<&'static str> for $Format {
+            fn from(s: &'static str) -> $Format {
+                $Format::from(Cow::Borrowed(s))
+            }
+        }
+
+        impl From<String> for $Format {
+            fn from(s: String) -> $Format {
+                $Format::from(Cow::Owned(s))
+            }
+        }
     };
 }
 

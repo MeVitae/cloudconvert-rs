@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 #[test]
 fn test_event_kind_deserialize() {
     use crate::webhook::EventKind;
@@ -40,6 +42,18 @@ fn test_format_serialize() {
     assert_ne!(serde_json::to_string(&Format::Doc).unwrap(), "\"pdf\"");
     assert_eq!(serde_json::to_string(&Format::Doc).unwrap(), "\"doc\"");
     assert_eq!(serde_json::to_string(&Format::Docx).unwrap(), "\"docx\"");
+}
+
+#[test]
+fn test_format_to_from_str() {
+    use crate::Format;
+    assert_eq!(Format::from(Format::Pdf.str()).str(), "pdf");
+    assert_eq!(Format::from(Format::Doc.str()).str(), "doc");
+    assert_eq!(Format::from(Format::Docx.str()).str(), "docx");
+    assert_eq!(
+        Format::from(Format::Custom(Cow::Borrowed("foo")).str()).str(),
+        "foo"
+    );
 }
 
 #[test]
@@ -150,7 +164,10 @@ async fn test_client() {
     use crate::{task::ImportUrl, Client, Format, ImportConvertExport};
     use std::borrow::Cow;
 
-    let bearer_token = std::env::vars().find(|(name, _)| name == "CLOUDCONVERT_TOKEN").unwrap().1;
+    let bearer_token = std::env::vars()
+        .find(|(name, _)| name == "CLOUDCONVERT_TOKEN")
+        .unwrap()
+        .1;
     let mut client = Client::default_client(&bearer_token);
     let call = ImportConvertExport {
         tag: Some(Cow::Borrowed("test")),
